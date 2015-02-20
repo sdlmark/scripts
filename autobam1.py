@@ -7,5 +7,11 @@ from os import listdir
 
 script, folder = argv
 
-for f in folder:
-	id_tag = f.split(".")
+filelist = listdir(folder)
+
+for f in filelist:
+	id_tag = f.split(".")[0] + ".Aligned.bam"
+#	print f, id_tag
+	command = "samtools view -bS %s > % s" % (f, id_tag)
+	print command
+	os.system(command)	
