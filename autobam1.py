@@ -14,4 +14,5 @@ for f in filelist:
 #	print f, id_tag
 	command = "samtools view -bS %s > % s" % (f, id_tag)
 	print command
+	os.chdir(folder)
 	os.system(command)	
