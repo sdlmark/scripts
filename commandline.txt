@@ -2,4 +2,13 @@ MAPPING:
 ========
 
 *STAR*
+# generate a genome index for mapping:
+
+$ STAR --runMode genomeGenerate --runThreadN 6 --genomeDir ~/c.brig_starindex/
+--genomeFastaFiles ~/c_briggsae.PRJNA10731.WS246.genomic.fa --sjdbGTFfile
+~/c_briggsae.PRJNA10731.WS246.annotations.gff3
+--sjdbGTFtagExonParentTranscript Parent --sjdbOverhang 99
+
+# map reads using STAR:
+
 
