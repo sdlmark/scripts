@@ -43,6 +43,25 @@ $ STAR --genomeDir ~/c.brig_starindex/ --runThreadN 6 --readFilesIn ~/smallRNA/a
 $ python autoSTARsRNA.py smallRNA/allReads/asrAF ~/smallRNA/allReads/AFmap2
 
 
+MANIPULATING SAM/BAM FILES:
+===========================
+
+***Samtools***
+
+# convert a SAM file into a BAM file
+# N.B. this step is necessary if you want to sort an alignment
+"view a SAM file (-S) as a BAM file (-b) and save to a file, *.bam"
+$ samtools view -bS AF14-1.Aligned.out.sam > AF14-1.Aligned.bam
+
+# sort a BAM file
+# N.B. do not use -o option unless stdout is desired
+# (i.e. when piping to something that expects stdout input)
+"sort bam alignment by name (-n) and save to a file, *.sorted.bam, and record
+errors in *.sorting.err"
+# [2015-02-23]
+$ samtools sort -n AF14-1.Aligned.bam AF14-1.sorted 2>AF14-1.sorting.err
+
+
 COUNTING:
 =========
 
