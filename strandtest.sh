@@ -7,6 +7,7 @@ gff=$2
 while read -r line
 do 
 	exonID=$(echo $line | tr ":" " " | awk '{print $2}')
-	echo $exonID
-	grep $exonID $2 | awk '{print $7}'
+#	echo $exonID
+	orientation=$(grep $exonID $2 | awk '{print $7}')
+	echo $exonID $orientation
 done < $1
