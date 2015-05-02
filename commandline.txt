@@ -67,8 +67,51 @@ COUNTING:
 
 ***HTSeq***
 
+# N.B.: bam files must first be sorted before passing them to HTSeq
+# it is also best to use a customized .gff file
+# to count reads in a sorted bam file:
+$ htseq-count --format=bam --stranded=reverse --mode=intersection-nonempty
+--idattr=Parent --type=exon AF20.sorted.bam ~/c_briggsae.WBonly.gff3 >
+AF20-2.countWB.test 2>AF20-2.countWB.err  
 
 
+VARIANT CALLING:
+================
 
+**Picard Tools**
+
+# N.B.: in order to do variant calling with GATK, it is necessary to first
+# process files using Picard Tools
+# before starting the pipeline below, it is also necessary to index the
+# reference genome first with samtools and then make a dictionary with Picard
+# N.B.: the index and dictionary need to be in the same location as the
+# reference genome
+
+# create an index for a reference genome using samtools
+$ samtools faidx reference_genome.fa
+
+# create a dictionary of the reference genome with Picard
+$ PICARD CreateSequenceDictionary I=reference_genome.fa
+O=reference_genome.fa.dict
+
+# first, reorder the reads to match order of contigs:
+# input file can be either bam or sam
+$ PICARD ReorderSam R=reference_genome.fa I=file.bam O=file.reorder.bam
+(to iterate through several files, use:
+$ for file in *sorted.bam ; do PICARD ReorderSam I=${file}
+O=${file/sorted.bam/reorder.bam} ; done)
+
+# second, group all reads into a single read:
+# following command also adds important information for GATK to bam file
+# SM denotes the sample name; replicates should be given the same sample name
+# so they are treated as one (accomplished by SM=${file/-*/}, this replaces
+# whatever is after the dash with nothing, so that AF14-1 becomes AF14)
+$ for file in *reorder.bam ; do PICARD AddOrReplaceReadGroups I=${file}
+O=${file/reorder.bam/readgroup.bam} LB=briggsae PL=illumina PU=1
+SM=${file/-*/} ; done 
+
+# third, sort the bam file:
+# SO denotes the sorting order; sort according to the read coordinates
+$ PICARD SortSam I= O= SO=coordinate
 
 
