@@ -114,4 +114,10 @@ SM=${file/-*/} ; done
 # SO denotes the sorting order; sort according to the read coordinates
 $ PICARD SortSam I= O= SO=coordinate
 
+# fourth, mark duplicates in the alignment:
+# M denotes the name of file that metrics for duplicates will be written to
+$ for file in *sortcoord.bam ; do PICARD I=${file}
+O=$[file/sortcoord.bam/markdup.bam} M=${file/sortcoord.bam/markdup.metrics}
+2>${file/sortcoord.bam/markdup.err} ; done
+
 
