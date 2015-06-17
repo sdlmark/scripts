@@ -121,3 +121,12 @@ O=$[file/sortcoord.bam/markdup.bam} M=${file/sortcoord.bam/markdup.metrics}
 2>${file/sortcoord.bam/markdup.err} ; done
 
 
+FILE MANIPULATION:
+==================
+
+# this example takes a list of significantly differentially expressed genes
+# and finds their corresponding positions in a gff:
+
+$ for line in genes.sigint.list ; do gene=`cat $line` ; grep "$gene"
+~/*noaltsplicing.gff3 ; done | awk '{print $1 "\t" $4 "\t" $5 "\t" $7 "\t"
+$9}' - | sed 's/Parent=Transcript://g' - | less
